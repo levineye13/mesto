@@ -1,0 +1,5 @@
+.content {
+	width: calc(100% - 398px);
+	max-width: 882px;
+	background-color: #000;
+}

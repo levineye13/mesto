@@ -18,3 +18,4 @@
 @import url('');
 @import url('');
 @import url('');
+div, section, header, footer, ul, li, a, h2, h1, h3, p, img {border: 1px solid red;}
