@@ -10,6 +10,7 @@
 	background: url('./../../../images/profile__add-button.png') center/auto no-repeat;
 	margin-left: auto;
 	cursor: pointer;
+	transition: opacity .3s ease;
 }
 
 .profile__add-button:hover {

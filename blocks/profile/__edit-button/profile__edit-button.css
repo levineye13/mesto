@@ -9,6 +9,7 @@
 	display: inline-block;
 	cursor: pointer;
 	position: relative;
+	transition: opacity .3s ease;
 }
 
 .profile__edit-button:hover {
