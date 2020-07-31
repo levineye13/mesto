@@ -16,3 +16,18 @@
 .profile__add-button:hover {
 	opacity: .6;
 }
+
+@media screen and (max-width: 820px) {
+	.profile__add-button {
+		margin: 0;
+		max-width: 100%;
+		grid-column: span 2 / 3;
+	}
+}
+
+@media screen and (max-width: 530px) {
+	.profile__add-button {
+		grid-column: 1;
+		justify-self: stretch;
+	}
+}

@@ -8,3 +8,27 @@
 	padding: 34px 36px 36px;
 	position: relative;
 }
+
+@media screen and (max-width: 768px) {
+	.popup__container {
+		width: 380px;
+	}
+}
+
+@media screen and (max-width: 540px) {
+	.popup__container {
+		width: 350px;
+	}
+}
+
+@media screen and (max-width: 425px) {
+	.popup__container {
+		width: 320px;
+	}
+}
+
+@media screen and (max-width: 340px) {
+	.popup__container {
+		width: 290px;
+	}
+}

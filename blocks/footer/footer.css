@@ -1,6 +1,18 @@
 .footer {
-	width: calc(100% - 398px);
 	max-width: 882px;
+	min-width: 282px;
 	background-color: #000;
 	margin: 0 auto;
+}
+
+@media screen and (max-width: 1024px) {
+	.footer {
+		width: calc(100% - 142px);
+	}
+}
+
+@media screen and (max-width: 768px) {
+	.footer {
+		width: calc(100% - 38px);
+	}
 }
