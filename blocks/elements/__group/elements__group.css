@@ -1,5 +1,15 @@
 .elements__group {
 	margin-left: auto;
-	max-width: 20px;
-	height: auto;
+	min-width: 21px;
+	max-width: 21px;
+	background: url('./../../../images/elements__group.svg') center/contain no-repeat;
+	padding: 18px 0 0;
+	outline: none;
+	cursor: pointer;
+	border: none;
+	transition: opacity .3s ease;
+}
+
+.elements__group:hover {
+	opacity: .6;
 }

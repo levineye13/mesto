@@ -27,8 +27,14 @@
 	}
 }
 
+@media screen and (max-width: 380px) {
+	.popup__container {
+		width: 270px;
+	}
+}
+
 @media screen and (max-width: 340px) {
 	.popup__container {
-		width: 290px;
+		width: 240px;
 	}
 }

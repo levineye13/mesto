@@ -2,11 +2,12 @@
 	box-sizing: border-box;
 	max-width: 24px;
 	min-width: 24px;
-	padding-top: 22px;
+	max-height: 24px;
+	padding: 22px 0 0;
 	border: 1px solid #fff;
 	background: url('./../../../images/profile__edit-button.png') center/auto no-repeat;
-	display: inline-block;
 	cursor: pointer;
+	outline: none;
 	transition: opacity .3s ease;
 }
 
