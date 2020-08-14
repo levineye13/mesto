@@ -1,4 +1,5 @@
 .elements__img {
-	width: 282px;
-	height: auto;
+	max-width: 282px;
+	max-height: 282px;
+	min-height: 282px;
 }
