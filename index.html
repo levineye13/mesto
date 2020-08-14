@@ -25,60 +25,6 @@
 			</section>
 			<section class="elements content__elements">
 				<ul class="elements__list">
-					<li class="elements__item">
-						<img src="./images/elements__karachaevsk.jpg" alt="Карачаевск" class="elements__img">
-						<div class="elements__container">
-							<h2 class="elements__title">
-								Карачаевск
-							</h2>
-							<button class="elements__group"></button>
-						</div>
-					</li>
-					<li class="elements__item">
-						<img src="./images/elements__elbrus.png" alt="Эльбрус" class="elements__img">
-						<div class="elements__container">
-							<h2 class="elements__title">
-								Гора Эльбрус
-							</h2>
-							<button class="elements__group"></button>
-						</div>
-					</li>
-					<li class="elements__item">
-						<img src="./images/elements__dombay.png" alt="Домбай" class="elements__img">
-						<div class="elements__container">
-							<h2 class="elements__title">
-								Домбай
-							</h2>
-							<button class="elements__group"></button>
-						</div>
-					</li>
-					<li class="elements__item">
-						<img src="./images/elements__elbrus.png" alt="Эльбрус" class="elements__img">
-						<div class="elements__container">
-							<h2 class="elements__title">
-								Гора Эльбрус
-							</h2>
-							<button class="elements__group"></button>
-						</div>
-					</li>
-					<li class="elements__item">
-						<img src="./images/elements__dombay.png" alt="Домбай" class="elements__img">
-						<div class="elements__container">
-							<h2 class="elements__title">
-								Домбай
-							</h2>
-							<button class="elements__group"></button>
-						</div>
-					</li>
-					<li class="elements__item">
-						<img src="./images/elements__karachaevsk.jpg" alt="Карачаево-Черкессия" class="elements__img">
-						<div class="elements__container">
-							<h2 class="elements__title">
-								Карачаево-Черкессия
-							</h2>
-							<button class="elements__group"></button>
-						</div>
-					</li>
 				</ul>
 			</section>
 		</main>
@@ -89,7 +35,7 @@
 		</footer>
 		<section class="popup">
 			<button class="popup__close-button"></button>
-			<form action="#" class="popup__container" name="popup-form">
+			<form action="#" id="edit-form" class="popup__container" name="popup-edit-form">
 				<h2 class="popup__title">
 					Редактировать профиль
 				</h2>
@@ -101,8 +47,33 @@
 					Сохранить
 				</button>
 			</form>
+			<form action="#" id="add-form" class="popup__container" name="popup-add-form">
+				<h2 class="popup__title">
+					Новое место
+				</h2>
+				<fieldset class="popup__info">
+					<input type="text" id="place-input" class="popup__input" name="place" required>
+					<input type="text" id="link-input" class="popup__input" name="link" required>
+				</fieldset>
+				<button class="popup__save-button">
+					Сохранить
+				</button>
+			</form>
 		</section>
 	</div>
+
+	<template id="template-card">
+		<li class="elements__item">
+			<img src="" alt="" class="elements__img">
+			<div class="elements__container">
+				<h2 class="elements__title">
+					
+				</h2>
+				<button class="elements__group"></button>
+			</div>
+		</li>
+	</template>
+
 	<script src="./scripts/index.js"></script>
 </body>
 
