@@ -31,32 +31,49 @@ let editForm = popup.querySelector('#edit-form');
 let nameInput = editForm.querySelector('#name-input');
 let jobInput = editForm.querySelector('#job-input');
 let addForm = popup.querySelector('#add-form');
-let placeInput = editForm.querySelector('#place-input');
-let linkInput = editForm.querySelector('#link-input');
+let placeInput = addForm.querySelector('#place-input');
+let linkInput = addForm.querySelector('#link-input');
+let cardTitle = document.querySelector('.elements__title');
 let closeButton = popup.querySelector('.popup__close-button');
 let profile = document.querySelector('.profile');
 let title = profile.querySelector('.profile__title');
 let subtitle = profile.querySelector('.profile__subtitle');
 let editButton = profile.querySelector('.profile__edit-button');
 let addButton = profile.querySelector('.profile__add-button');
+let elementsList = document.querySelector('.elements__list');
 
-const addingCards = () => {
+//Создание карточки
+const createCard = (name, link) => {
 	const templateCard = document.querySelector('#template-card').content;
-	const cardsList = document.querySelector('.elements__list');
+	const card = templateCard.cloneNode(true);
 
-	initialCards.forEach(item => {
-		const card = templateCard.cloneNode(true)
-		card.querySelector('.elements__img').src = item.link;
-		card.querySelector('.elements__img').setAttribute('alt', item.name);
-		card.querySelector('.elements__title').textContent = item.name;
-		cardsList.append(card);
+	card.querySelector('.elements__img').src = link;
+	card.querySelector('.elements__img').setAttribute('alt', name);
+	card.querySelector('.elements__title').textContent = name;
+
+	return card;
+}
+
+//Добавление всех карточек из массива
+const addingCards = arr => {
+	arr.forEach(item => {
+		elementsList.append(createCard(item.name, item.link));
 	});
 }
 
-addingCards();
+addingCards(initialCards);
+
+//Добавление карточки пользователем
+const pushCard = arr => {
+	const place = placeInput.value;
+	const link = linkInput.value;
+
+	arr.unshift({place, link});
+	elementsList.prepend(createCard(place, link));
+}
 
 //Открытие popup
-function openForm(evt) {
+const openForm = evt => {
 	const target = evt.target;
 
 	switch (target) {
@@ -75,7 +92,7 @@ function openForm(evt) {
 }
 
 //Закрытие popup
-function closeForm() {
+const closeForm = () => {
 	popup.classList.remove('popup_opened');
 
 	if (editForm.classList.contains('popup__container_opened')) {
@@ -86,7 +103,7 @@ function closeForm() {
 }
 
 //Отправка формы и закрытие popup
-function formSubmitHandler(evt) {
+const formSubmitHandler = evt => {
 	evt.preventDefault();
 	const target = evt.target;
 
@@ -97,7 +114,9 @@ function formSubmitHandler(evt) {
 			break;
 
 		case addForm:
-
+			pushCard(initialCards);
+			placeInput.value = '';
+			linkInput.value = '';
 			break;
 	}
 	closeForm();
