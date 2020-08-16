@@ -1,27 +1,33 @@
 const initialCards = [
 	{
 		name: 'Архыз',
-		link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
+		link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg',
+		like: false
 	},
 	{
 		name: 'Челябинская область',
-		link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
+		link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg',
+		like: false
 	},
 	{
 		name: 'Иваново',
-		link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
+		link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg',
+		like: false
 	},
 	{
 		name: 'Камчатка',
-		link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
+		link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg',
+		like: false
 	},
 	{
 		name: 'Холмогорский район',
-		link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
+		link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg',
+		like: false
 	},
 	{
 		name: 'Байкал',
-		link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
+		link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg',
+		like: false
 	}
 ];
 
@@ -65,11 +71,12 @@ addingCards(initialCards);
 
 //Добавление карточки пользователем
 const pushCard = arr => {
-	const place = placeInput.value;
+	const name = placeInput.value;
 	const link = linkInput.value;
+	const like = false;
 
-	arr.unshift({place, link});
-	elementsList.prepend(createCard(place, link));
+	arr.unshift({ name, link, like });
+	elementsList.prepend(createCard(name, link));
 }
 
 //Открытие popup
@@ -121,6 +128,25 @@ const formSubmitHandler = evt => {
 	}
 	closeForm();
 }
+
+//Обработка лайков
+elementsList.addEventListener('click', evt => {
+	const target = evt.target;
+
+	if (target.classList.contains('elements__group')) {
+		target.classList.toggle('elements__group_active');
+	}
+
+	const likeArr = elementsList.querySelectorAll('.elements__group');
+
+	likeArr.forEach((item, index) => {
+		if (item.classList.contains('elements__group_active')) {
+			initialCards[index].like = true;
+		} else {
+			initialCards[index].like = false;
+		}
+	});
+});
 
 profile.addEventListener('click', openForm);
 closeButton.addEventListener('click', closeForm);
