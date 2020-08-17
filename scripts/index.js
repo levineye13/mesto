@@ -31,17 +31,17 @@ const initialCards = [
 	}
 ];
 
-let popup = document.querySelector('.popup');
+const popup = document.querySelector('.popup');
 let formContainer = popup.querySelector('.popup__container');
-let editForm = popup.querySelector('#edit-form');
+const editForm = popup.querySelector('#edit-form');
 let nameInput = editForm.querySelector('#name-input');
 let jobInput = editForm.querySelector('#job-input');
-let addForm = popup.querySelector('#add-form');
+const addForm = popup.querySelector('#add-form');
 let placeInput = addForm.querySelector('#place-input');
 let linkInput = addForm.querySelector('#link-input');
 let cardTitle = document.querySelector('.elements__title');
 let closeButton = popup.querySelector('.popup__close-button');
-let profile = document.querySelector('.profile');
+const profile = document.querySelector('.profile');
 let title = profile.querySelector('.profile__title');
 let subtitle = profile.querySelector('.profile__subtitle');
 let editButton = profile.querySelector('.profile__edit-button');
@@ -115,15 +115,19 @@ const createCard = (name, link) => {
 	const templateCard = document.querySelector('#template-card').content;
 	const card = templateCard.cloneNode(true);
 
-	card.querySelector('.elements__img').src = link;
-	card.querySelector('.elements__img').setAttribute('alt', name);
+	const cardImg = card.querySelector('.elements__img');
+	const deleteCardButton = card.querySelector('.elements__delete-card');
+	const likeCardButton = card.querySelector('.elements__group');
+
+	cardImg.src = link;
+	cardImg.setAttribute('alt', name);
 	card.querySelector('.elements__title').textContent = name;
 
-	card.querySelector('.elements__img').addEventListener('click', fillingImageContainer);
-	card.querySelector('.elements__delete-card').addEventListener('click', removingCardsFromArray);
-	card.querySelector('.elements__delete-card').addEventListener('click', removingCardsFromPage);
-	card.querySelector('.elements__group').addEventListener('click', changingLikes);
-	card.querySelector('.elements__group').addEventListener('click', changingArrayLikes);
+	cardImg.addEventListener('click', fillingImageContainer);
+	deleteCardButton.addEventListener('click', removingCardsFromArray);
+	deleteCardButton.addEventListener('click', removingCardsFromPage);
+	likeCardButton.addEventListener('click', changingLikes);
+	likeCardButton.addEventListener('click', changingArrayLikes);
 
 	return card;
 }
