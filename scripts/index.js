@@ -47,6 +47,7 @@ let subtitle = profile.querySelector('.profile__subtitle');
 let editButton = profile.querySelector('.profile__edit-button');
 let addButton = profile.querySelector('.profile__add-button');
 let elementsList = document.querySelector('.elements__list');
+let popupImgContainer = popup.querySelector('.popup__img-container');
 
 //Создание карточки
 const createCard = (name, link) => {
@@ -82,6 +83,7 @@ const pushCard = arr => {
 //Открытие popup
 const openForm = evt => {
 	const target = evt.target;
+	const elementsImg = elementsList.querySelector('.elements__img');
 
 	switch (target) {
 		case editButton:
@@ -106,6 +108,9 @@ const closeForm = () => {
 		editForm.classList.remove('popup__container_opened');
 	} else if (addForm.classList.contains('popup__container_opened')) {
 		addForm.classList.remove('popup__container_opened');
+	} else if (popupImgContainer.classList.contains('popup__img-container_opened')) {
+		popupImgContainer.classList.remove('popup__img-container_opened');
+		popup.classList.remove('popup_substrate_opened');
 	}
 }
 
@@ -173,6 +178,30 @@ const removingCardsFromPage = evt => {
 	}
 }
 
+//Открытие картинки (попапа)
+const openImage = evt => {
+	popup.classList.add('popup_opened', 'popup_substrate_opened');
+	popupImgContainer.classList.add('popup__img-container_opened');
+}
+
+//Заполнение попапа с картинкой
+const fillingImageContainer = evt => {
+	const target = evt.target;
+	const imageArray = elementsList.querySelectorAll('.elements__img');
+	const popupImage = popupImgContainer.querySelector('.popup__card-img');
+	const popupTitle = popupImgContainer.querySelector('.popup__title-img');
+
+	imageArray.forEach((item, index) => {
+		if (target === item) {
+			popupImage.src = initialCards[index].link;
+			popupImage.setAttribute('alt', initialCards[index].name);
+			popupTitle.textContent = initialCards[index].name;
+		}
+	});
+	openImage();
+}
+
+
 profile.addEventListener('click', openForm);
 closeButton.addEventListener('click', closeForm);
 popup.addEventListener('submit', formSubmitHandler);
@@ -180,3 +209,4 @@ elementsList.addEventListener('click', changingLikes);
 elementsList.addEventListener('click', changingArrayLikes);
 elementsList.addEventListener('click', removingCardsFromArray);
 elementsList.addEventListener('click', removingCardsFromPage);
+elementsList.addEventListener('click', fillingImageContainer);
