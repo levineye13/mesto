@@ -49,6 +49,67 @@ let addButton = profile.querySelector('.profile__add-button');
 let elementsList = document.querySelector('.elements__list');
 let popupImgContainer = popup.querySelector('.popup__img-container');
 
+//Обработка лайков
+const changingLikes = evt => {
+	const target = evt.target;
+
+	target.classList.toggle('elements__group_active');
+}
+
+//Изменение данных о лайках в массиве
+const changingArrayLikes = evt => {
+	const likeArr = elementsList.querySelectorAll('.elements__group');
+
+	likeArr.forEach((item, index) => {
+		if (item.classList.contains('elements__group_active')) {
+			initialCards[index].like = true;
+		} else {
+			initialCards[index].like = false;
+		}
+	});
+}
+
+//Удаление карточек из массива
+const removingCardsFromArray = evt => {
+	const target = evt.target;
+	const listButton = elementsList.querySelectorAll('.elements__delete-card');
+	
+	listButton.forEach((item, index) => {
+		if (target === item) {
+			initialCards.splice(index, 1);
+		}
+	});
+}
+
+//Удаление карточек со страницы
+const removingCardsFromPage = evt => {
+	const target = evt.target;
+		
+	const elementsItem = target.closest('.elements__item');
+	elementsItem.remove();
+}
+
+//Открытие картинки (попапа)
+const openImage = evt => {
+	popup.classList.add('popup_opened', 'popup_substrate_opened');
+	popupImgContainer.classList.add('popup__img-container_opened');
+}
+
+//Заполнение попапа с картинкой
+const fillingImageContainer = evt => {
+	const target = evt.target;
+	const popupImage = popupImgContainer.querySelector('.popup__card-img');
+	const popupTitle = popupImgContainer.querySelector('.popup__title-img');
+
+	const card = target.closest('.elements__item');
+
+	popupImage.src = target.src;
+	popupImage.setAttribute('alt', target.getAttribute('alt'));
+	popupTitle.textContent = card.querySelector('.elements__title').textContent;
+
+	openImage();
+}
+
 //Создание карточки
 const createCard = (name, link) => {
 	const templateCard = document.querySelector('#template-card').content;
@@ -57,6 +118,12 @@ const createCard = (name, link) => {
 	card.querySelector('.elements__img').src = link;
 	card.querySelector('.elements__img').setAttribute('alt', name);
 	card.querySelector('.elements__title').textContent = name;
+
+	card.querySelector('.elements__img').addEventListener('click', fillingImageContainer);
+	card.querySelector('.elements__delete-card').addEventListener('click', removingCardsFromArray);
+	card.querySelector('.elements__delete-card').addEventListener('click', removingCardsFromPage);
+	card.querySelector('.elements__group').addEventListener('click', changingLikes);
+	card.querySelector('.elements__group').addEventListener('click', changingArrayLikes);
 
 	return card;
 }
@@ -135,78 +202,78 @@ const formSubmitHandler = evt => {
 }
 
 //Обработка лайков
-const changingLikes = evt => {
-	const target = evt.target;
+// const changingLikes = evt => {
+// 	const target = evt.target;
 
-	if (target.classList.contains('elements__group')) {
-		target.classList.toggle('elements__group_active');
-	}
-}
+// 	if (target.classList.contains('elements__group')) {
+// 		target.classList.toggle('elements__group_active');
+// 	}
+// }
 
 //Изменение данных о лайках в массиве
-const changingArrayLikes = evt => {
-	const likeArr = elementsList.querySelectorAll('.elements__group');
+// const changingArrayLikes = evt => {
+// 	const likeArr = elementsList.querySelectorAll('.elements__group');
 
-	likeArr.forEach((item, index) => {
-		if (item.classList.contains('elements__group_active')) {
-			initialCards[index].like = true;
-		} else {
-			initialCards[index].like = false;
-		}
-	});
-}
+// 	likeArr.forEach((item, index) => {
+// 		if (item.classList.contains('elements__group_active')) {
+// 			initialCards[index].like = true;
+// 		} else {
+// 			initialCards[index].like = false;
+// 		}
+// 	});
+// }
 
 //Удаление карточек из массива
-const removingCardsFromArray = evt => {
-	const target = evt.target;
-	const listButton = elementsList.querySelectorAll('.elements__delete-card');
+// const removingCardsFromArray = evt => {
+// 	const target = evt.target;
+// 	const listButton = elementsList.querySelectorAll('.elements__delete-card');
 	
-	listButton.forEach((item, index) => {
-		if (target === item) {
-			initialCards.splice(index, 1);
-		}
-	});
-}
+// 	listButton.forEach((item, index) => {
+// 		if (target === item) {
+// 			initialCards.splice(index, 1);
+// 		}
+// 	});
+// }
 
 //Удаление карточек со страницы
-const removingCardsFromPage = evt => {
-	const target = evt.target;
+// const removingCardsFromPage = evt => {
+// 	const target = evt.target;
 		
-	if (target.classList.contains('elements__delete-card')) {
-		const elementsItem = target.closest('.elements__item');
-		elementsItem.remove();
-	}
-}
+// 	if (target.classList.contains('elements__delete-card')) {
+// 		const elementsItem = target.closest('.elements__item');
+// 		elementsItem.remove();
+// 	}
+// }
 
 //Открытие картинки (попапа)
-const openImage = evt => {
-	popup.classList.add('popup_opened', 'popup_substrate_opened');
-	popupImgContainer.classList.add('popup__img-container_opened');
-}
+// const openImage = evt => {
+// 	popup.classList.add('popup_opened', 'popup_substrate_opened');
+// 	popupImgContainer.classList.add('popup__img-container_opened');
+// }
 
 //Заполнение попапа с картинкой
-const fillingImageContainer = evt => {
-	const target = evt.target;
-	const imageArray = elementsList.querySelectorAll('.elements__img');
-	const popupImage = popupImgContainer.querySelector('.popup__card-img');
-	const popupTitle = popupImgContainer.querySelector('.popup__title-img');
+// const fillingImageContainer = evt => {
+// 	const target = evt.target;
+// 	const imageArray = elementsList.querySelectorAll('.elements__img');
+// 	const popupImage = popupImgContainer.querySelector('.popup__card-img');
+// 	const popupTitle = popupImgContainer.querySelector('.popup__title-img');
 
-	imageArray.forEach((item, index) => {
-		if (target === item) {
-			popupImage.src = initialCards[index].link;
-			popupImage.setAttribute('alt', initialCards[index].name);
-			popupTitle.textContent = initialCards[index].name;
-		}
-	});
-	openImage();
-}
+// 	imageArray.forEach((item, index) => {
+// 		if (target === item) {
+// 			popupImage.src = initialCards[index].link;
+// 			popupImage.setAttribute('alt', initialCards[index].name);
+// 			popupTitle.textContent = initialCards[index].name;
+// 		}
+// 	});
+// 	openImage();
+// }
 
 
 profile.addEventListener('click', openForm);
 closeButton.addEventListener('click', closeForm);
 popup.addEventListener('submit', formSubmitHandler);
-elementsList.addEventListener('click', changingLikes);
-elementsList.addEventListener('click', changingArrayLikes);
-elementsList.addEventListener('click', removingCardsFromArray);
-elementsList.addEventListener('click', removingCardsFromPage);
-elementsList.addEventListener('click', fillingImageContainer);
+//elementsList.addEventListener('click', changingLikes);
+// elementsList.addEventListener('click', changingArrayLikes);
+// elementsList.addEventListener('click', removingCardsFromArray);
+// elementsList.addEventListener('click', removingCardsFromPage);
+// elementsList.addEventListener('click', fillingImageContainer);
