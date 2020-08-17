@@ -130,16 +130,16 @@ const formSubmitHandler = evt => {
 }
 
 //Обработка лайков
-elementsList.addEventListener('click', evt => {
+const changingLikes = evt => {
 	const target = evt.target;
 
 	if (target.classList.contains('elements__group')) {
 		target.classList.toggle('elements__group_active');
 	}
-});
+}
 
 //Изменение данных о лайках в массиве
-elementsList.addEventListener('click', evt => {
+const changingArrayLikes = evt => {
 	const likeArr = elementsList.querySelectorAll('.elements__group');
 
 	likeArr.forEach((item, index) => {
@@ -149,30 +149,34 @@ elementsList.addEventListener('click', evt => {
 			initialCards[index].like = false;
 		}
 	});
-});
+}
 
 //Удаление карточек из массива
-elementsList.addEventListener('click', evt => {
+const removingCardsFromArray = evt => {
 	const target = evt.target;
-
 	const listButton = elementsList.querySelectorAll('.elements__delete-card');
+	
 	listButton.forEach((item, index) => {
 		if (target === item) {
 			initialCards.splice(index, 1);
 		}
 	});
-});
+}
 
 //Удаление карточек со страницы
-elementsList.addEventListener('click', evt => {
+const removingCardsFromPage = evt => {
 	const target = evt.target;
 		
 	if (target.classList.contains('elements__delete-card')) {
-		const listItem = target.closest('.elements__item');
-		listItem.remove();
+		const elementsItem = target.closest('.elements__item');
+		elementsItem.remove();
 	}
-});
+}
 
 profile.addEventListener('click', openForm);
 closeButton.addEventListener('click', closeForm);
 popup.addEventListener('submit', formSubmitHandler);
+elementsList.addEventListener('click', changingLikes);
+elementsList.addEventListener('click', changingArrayLikes);
+elementsList.addEventListener('click', removingCardsFromArray);
+elementsList.addEventListener('click', removingCardsFromPage);
