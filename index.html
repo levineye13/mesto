@@ -33,7 +33,7 @@
 				&copy; 2020 Mesto Russia
 			</p>
 		</footer>
-		<section class="popup">
+		<section class="popup popup_profile">
 			<div class="popup__wrapper">
 				<button class="popup__close-button"></button>
 				<form action="#" id="edit-form" class="popup__container" name="popup-edit-form">
@@ -48,18 +48,29 @@
 						Сохранить
 					</button>
 				</form>
+			</div>
+		</section>
+		<section class="popup popup_add-card">
+			<div class="popup__wrapper">
+				<button class="popup__close-button"></button>
 				<form action="#" id="add-form" class="popup__container" name="popup-add-form">
 					<h2 class="popup__title">
 						Новое место
 					</h2>
 					<fieldset class="popup__info">
 						<input type="text" id="place-input" class="popup__input" name="place" placeholder="Название" required>
-						<input type="text" id="link-input" class="popup__input" name="link" placeholder="Ссылка на картинку" required>
+						<input type="text" id="link-input" class="popup__input" name="link" placeholder="Ссылка на картинку"
+							required>
 					</fieldset>
 					<button class="popup__save-button">
 						Сохранить
 					</button>
 				</form>
+			</div>
+		</section>
+		<section class="popup popup_image">
+			<div class="popup__wrapper">
+				<button class="popup__close-button"></button>
 				<article class="popup__img-container">
 					<img src="" alt="" class="popup__card-img">
 					<p class="popup__title-img"></p>
