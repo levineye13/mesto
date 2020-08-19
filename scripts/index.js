@@ -25,9 +25,9 @@ const initialCards = [
 	}
 ];
 
-const profilePopup = document.querySelector('.popup_profile');
-const addCardPopup = document.querySelector('.popup_add-card');
-const imagePopup = document.querySelector('.popup_image');
+const profilePopup = document.querySelector('.popup_type_profile');
+const addCardPopup = document.querySelector('.popup_type_add-card');
+const imagePopup = document.querySelector('.popup_type_image');
 const editForm = profilePopup.querySelector('#edit-form');
 const addForm = addCardPopup.querySelector('#add-form');
 const nameInput = profilePopup.querySelector('#name-input');
@@ -72,7 +72,7 @@ const fillImageContainer = evt => {
 	popupImage.setAttribute('alt', target.getAttribute('alt'));
 	popupTitle.textContent = card.querySelector('.elements__title').textContent;
 
-	openImagePopup();
+	openPopup(imagePopup);
 }
 
 //Создание карточки
@@ -95,20 +95,17 @@ const createCard = (name, link) => {
 }
 
 //Добавление всех карточек из массива
-const addCardToPage = arr => {
-	arr.forEach(item => {
+const addCardsToPage = cards => {
+	cards.forEach(item => {
 		elementsList.append(createCard(item.name, item.link));
 	});
 }
 
-addCardToPage(initialCards);
+addCardsToPage(initialCards);
 
 //Добавление карточки пользователем
 const pushCard = () => {
-	const name = placeInput.value;
-	const link = linkInput.value;
-
-	elementsList.prepend(createCard(name, link));
+	elementsList.prepend(createCard(placeInput.value, linkInput.value));
 }
 
 //Открытие попапа
@@ -128,33 +125,13 @@ const openProfilePopup = () => {
 	openPopup(profilePopup);
 }
 
-const openAddCardPopup = () => {
-	openPopup(addCardPopup);
-}
-
-const openImagePopup = () => {
-	openPopup(imagePopup);
-}
-
-const closeProfilePopup = () => {
-	closePopup(profilePopup);
-}
-
-const closeAddCardPopup = () => {
-	closePopup(addCardPopup);
-}
-
-const closeImagePopup = () => {
-	closePopup(imagePopup);
-}
-
 const editFormSubmitHandler = evt => {
 	evt.preventDefault();
 
 	title.textContent = nameInput.value;
 	subtitle.textContent = jobInput.value;
 
-	closeProfilePopup();
+	closePopup(profilePopup);
 }
 
 const addFormSubmitHandler = evt => {
@@ -164,13 +141,13 @@ const addFormSubmitHandler = evt => {
 	placeInput.value = '';
 	linkInput.value = '';
 
-	closeAddCardPopup();
+	closePopup(addCardPopup);
 }
 
 editButton.addEventListener('click', openProfilePopup);
-addButton.addEventListener('click', openAddCardPopup);
-closeButtonProfile.addEventListener('click', closeProfilePopup);
-closeButtonAddCard.addEventListener('click', closeAddCardPopup);
-closeButtonImage.addEventListener('click', closeImagePopup);
+addButton.addEventListener('click', () => openPopup(addCardPopup));
+closeButtonProfile.addEventListener('click', () => closePopup(profilePopup));
+closeButtonAddCard.addEventListener('click', () => closePopup(addCardPopup));
+closeButtonImage.addEventListener('click', () => closePopup(imagePopup));
 editForm.addEventListener('submit', editFormSubmitHandler);
 addForm.addEventListener('submit', addFormSubmitHandler);
