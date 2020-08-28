@@ -1,4 +1,5 @@
-.popup__input-error {
+.popup__error {
+	visibility: hidden;
 	position: absolute;
 	top: calc(100% + 5px);
 	left: 0;
