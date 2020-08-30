@@ -45,19 +45,18 @@ const hasInvalidInput = (inputList) => {
 //Переключение состояния кнопки
 const toggleButtonState = (validationObject, inputList, buttonElement) => {
   if (hasInvalidInput(inputList)) {
+    buttonElement.setAttribute("disabled", "");
     buttonElement.classList.add(validationObject.inactiveButtonClass);
   } else {
+    buttonElement.removeAttribute("disabled");
     buttonElement.classList.remove(validationObject.inactiveButtonClass);
   }
 };
 
 //Добавление слушателя для полей ввода
-const setEventListener = (validationObject, formElement) => {
+const setEventListener = (validationObject, formElement, buttonElement) => {
   const inputList = Array.from(
     formElement.querySelectorAll(validationObject.inputSelector)
-  );
-  const buttonElement = formElement.querySelector(
-    validationObject.submitButtonSelector
   );
 
   toggleButtonState(validationObject, inputList, buttonElement);
@@ -77,17 +76,21 @@ const enableValidation = (validationObject) => {
   );
 
   formList.forEach((formElement) => {
+    const buttonElement = formElement.querySelector(
+      validationObject.submitButtonSelector
+    );
+
     formElement.addEventListener("submit", (evt) => {
       evt.preventDefault();
     });
 
-    setEventListener(validationObject, formElement);
+    setEventListener(validationObject, formElement, buttonElement);
   });
 };
 
 //Вызов функции включения валидации
 enableValidation({
-	formSelector: ".popup__form",
+  formSelector: ".popup__form",
   inputSelector: ".popup__input",
   submitButtonSelector: ".popup__save-button",
   inactiveButtonClass: "button_inactive",

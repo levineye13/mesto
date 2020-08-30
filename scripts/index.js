@@ -32,6 +32,7 @@ const initialCards = [
 ];
 
 const page = document.querySelector(".page");
+const templateCard = document.querySelector("#template-card").content;
 const popupList = Array.from(page.querySelectorAll(".popup"));
 const profilePopup = page.querySelector(".popup_type_profile");
 const addCardPopup = page.querySelector(".popup_type_add-card");
@@ -55,6 +56,7 @@ const elementsList = document.querySelector(".elements__list");
 const popupImgContainer = imagePopup.querySelector(".popup__img-container");
 const popupImage = popupImgContainer.querySelector(".popup__card-img");
 const popupTitle = popupImgContainer.querySelector(".popup__title-img");
+const saveButtonAddCard = addCardPopup.querySelector(".popup__save-button");
 
 //Обработка лайков
 const changeLike = (evt) => {
@@ -85,7 +87,6 @@ const fillImageContainer = (evt) => {
 
 //Создание карточки
 const createCard = (name, link) => {
-  const templateCard = document.querySelector("#template-card").content;
   const card = templateCard.cloneNode(true);
 
   const cardImg = card.querySelector(".elements__img");
@@ -119,11 +120,17 @@ const pushCard = () => {
 //Открытие попапа
 const openPopup = (popupElement) => {
   popupElement.classList.add("popup_opened");
+
+  document.addEventListener("keydown", closePopupClickKey);
+  page.addEventListener("click", closePopupClickScreen);
 };
 
 //Закрытие попапа
 const closePopup = (popupElement) => {
   popupElement.classList.remove("popup_opened");
+
+  document.removeEventListener("keydown", closePopupClickKey);
+  page.removeEventListener("click", closePopupClickScreen);
 };
 
 //Заполнение инпутов при загрузке страницы, иначе кнопка была бы disable даже при заполненных полях,
@@ -142,8 +149,6 @@ const openProfilePopup = () => {
 };
 
 const editFormSubmitHandler = (evt) => {
-  evt.preventDefault();
-
   title.textContent = nameInput.value;
   subtitle.textContent = jobInput.value;
 
@@ -151,11 +156,14 @@ const editFormSubmitHandler = (evt) => {
 };
 
 const addFormSubmitHandler = (evt) => {
-  evt.preventDefault();
-
   pushCard();
+
   placeInput.value = "";
   linkInput.value = "";
+  //Необходимо заблокировать кнопку здесь, тк после срабатывания события submit и очистки полей кнопка остается доступной,
+  //тк событие input не видит этих изменений
+  saveButtonAddCard.setAttribute("disabled", "");
+  saveButtonAddCard.classList.add("button_inactive");
 
   closePopup(addCardPopup);
 };
@@ -173,11 +181,9 @@ const closePopupClickKey = (evt) => {
         closePopup(popupElement);
       }
     });
-	}
+  }
 };
 
-page.addEventListener("click", (evt) => closePopupClickScreen(evt));
-document.addEventListener("keydown", (evt) => closePopupClickKey(evt));
 editButton.addEventListener("click", openProfilePopup);
 addButton.addEventListener("click", () => openPopup(addCardPopup));
 closeButtonProfile.addEventListener("click", () => closePopup(profilePopup));
