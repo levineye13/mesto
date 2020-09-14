@@ -1,3 +1,6 @@
+import { Card } from "./Card.js";
+import { FormValidator } from "./FormValidator.js";
+
 const initialCards = [
   {
     name: "Архыз",
@@ -32,7 +35,6 @@ const initialCards = [
 ];
 
 const page = document.querySelector(".page");
-const templateCard = document.querySelector("#template-card").content;
 const popupList = Array.from(page.querySelectorAll(".popup"));
 const profilePopup = page.querySelector(".popup_type_profile");
 const addCardPopup = page.querySelector(".popup_type_add-card");
@@ -43,7 +45,6 @@ const nameInput = profilePopup.querySelector("#name-input");
 const jobInput = profilePopup.querySelector("#job-input");
 const placeInput = addCardPopup.querySelector("#place-input");
 const linkInput = addCardPopup.querySelector("#link-input");
-const cardTitle = document.querySelector(".elements__title");
 const closeButtonProfile = profilePopup.querySelector(".popup__close-button");
 const closeButtonAddCard = addCardPopup.querySelector(".popup__close-button");
 const closeButtonImage = imagePopup.querySelector(".popup__close-button");
@@ -58,63 +59,22 @@ const popupImage = popupImgContainer.querySelector(".popup__card-img");
 const popupTitle = popupImgContainer.querySelector(".popup__title-img");
 const saveButtonAddCard = addCardPopup.querySelector(".popup__save-button");
 
-//Обработка лайков
-const changeLike = (evt) => {
-  const target = evt.target;
-
-  target.classList.toggle("elements__group_active");
+//Обработчик закрытия попапа кликом по экрану
+const closePopupClickScreen = (evt) => {
+  if (evt.target.classList.contains("popup_opened")) {
+    closePopup(evt.target);
+  }
 };
 
-//Удаление карточек со страницы
-const removeCard = (evt) => {
-  const target = evt.target;
-
-  const elementsItem = target.closest(".elements__item");
-  elementsItem.remove();
-};
-
-//Заполнение попапа с картинкой
-const fillImageContainer = (evt) => {
-  const target = evt.target;
-  const card = target.closest(".elements__item");
-
-  popupImage.src = target.src;
-  popupImage.setAttribute("alt", target.getAttribute("alt"));
-  popupTitle.textContent = card.querySelector(".elements__title").textContent;
-
-  openPopup(imagePopup);
-};
-
-//Создание карточки
-const createCard = (name, link) => {
-  const card = templateCard.cloneNode(true);
-
-  const cardImg = card.querySelector(".elements__img");
-  const deleteCardButton = card.querySelector(".elements__delete-card");
-  const likeCardButton = card.querySelector(".elements__group");
-
-  cardImg.src = link;
-  cardImg.setAttribute("alt", name);
-  card.querySelector(".elements__title").textContent = name;
-  cardImg.addEventListener("click", fillImageContainer);
-  deleteCardButton.addEventListener("click", removeCard);
-  likeCardButton.addEventListener("click", changeLike);
-
-  return card;
-};
-
-//Добавление всех карточек из массива
-const addCardsToPage = (cards) => {
-  cards.forEach((item) => {
-    elementsList.append(createCard(item.name, item.link));
-  });
-};
-
-addCardsToPage(initialCards);
-
-//Добавление карточки пользователем
-const pushCard = () => {
-  elementsList.prepend(createCard(placeInput.value, linkInput.value));
+//Обработчик закрытия попапа кликом по Esc
+const closePopupClickKey = (evt) => {
+  if (evt.key === "Escape") {
+    popupList.forEach((popupElement) => {
+      if (popupElement.classList.contains("popup_opened")) {
+        closePopup(popupElement);
+      }
+    });
+  }
 };
 
 //Открытие попапа
@@ -133,8 +93,21 @@ const closePopup = (popupElement) => {
   page.removeEventListener("click", closePopupClickScreen);
 };
 
+//Заполнение попапа с картинкой
+const fillImageContainer = (evt) => {
+  if (evt.target.classList.contains("elements__img")) {
+    const card = evt.target.closest(".elements__item");
+
+    popupImage.src = evt.target.src;
+    popupImage.setAttribute("alt", evt.target.getAttribute("alt"));
+    popupTitle.textContent = card.querySelector(".elements__title").textContent;
+
+    openPopup(imagePopup);
+  }
+};
+
 //Заполнение инпутов при загрузке страницы, иначе кнопка была бы disable даже при заполненных полях,
-//так как они заполнялись только при открытии попапа
+//так как они заполняются только при открытии попапа
 const loadValueProfilePopup = () => {
   nameInput.value = title.textContent;
   jobInput.value = subtitle.textContent;
@@ -148,11 +121,46 @@ const openProfilePopup = () => {
   openPopup(profilePopup);
 };
 
+//Форма редактирования
 const editFormSubmitHandler = (evt) => {
   title.textContent = nameInput.value;
   subtitle.textContent = jobInput.value;
 
   closePopup(profilePopup);
+};
+
+const validationObject = {
+  formSelector: ".popup__form",
+  inputSelector: ".popup__input",
+  submitButtonSelector: ".popup__save-button",
+  inactiveButtonClass: "button_inactive",
+  inputErrorClass: "popup__input_type_error",
+  errorClass: "popup__error_visible",
+};
+
+//Создание экземпляров карточек и добавление на страницу
+initialCards.forEach((card) => {
+  card = new Card(card, "#template-card");
+  document.querySelector(".elements__list").prepend(card.generateCard());
+});
+
+//Валидация форм
+const formList = document.querySelectorAll(validationObject.formSelector);
+formList.forEach((formElement) => {
+  const formValid = new FormValidator(validationObject, formElement);
+  formValid.enableValidation();
+});
+
+//Добавление карточки пользователем
+const pushCard = () => {
+  const cardElement = new Card(
+    {
+      name: placeInput.value,
+      link: linkInput.value,
+    },
+    "#template-card"
+  );
+  elementsList.prepend(cardElement.generateCard());
 };
 
 const addFormSubmitHandler = (evt) => {
@@ -168,24 +176,9 @@ const addFormSubmitHandler = (evt) => {
   closePopup(addCardPopup);
 };
 
-const closePopupClickScreen = (evt) => {
-  if (evt.target.classList.contains("popup_opened")) {
-    closePopup(evt.target);
-  }
-};
-
-const closePopupClickKey = (evt) => {
-  if (evt.key === "Escape") {
-    popupList.forEach((popupElement) => {
-      if (popupElement.classList.contains("popup_opened")) {
-        closePopup(popupElement);
-      }
-    });
-  }
-};
-
 editButton.addEventListener("click", openProfilePopup);
 addButton.addEventListener("click", () => openPopup(addCardPopup));
+elementsList.addEventListener("click", (evt) => fillImageContainer(evt));
 closeButtonProfile.addEventListener("click", () => closePopup(profilePopup));
 closeButtonAddCard.addEventListener("click", () => closePopup(addCardPopup));
 closeButtonImage.addEventListener("click", () => closePopup(imagePopup));
