@@ -59,6 +59,15 @@ const popupImage = popupImgContainer.querySelector(".popup__card-img");
 const popupTitle = popupImgContainer.querySelector(".popup__title-img");
 const saveButtonAddCard = addCardPopup.querySelector(".popup__save-button");
 
+const validationObject = {
+  formSelector: ".popup__form",
+  inputSelector: ".popup__input",
+  submitButtonSelector: ".popup__save-button",
+  inactiveButtonClass: "button_inactive",
+  inputErrorClass: "popup__input_type_error",
+  errorClass: "popup__error_visible",
+};
+
 //Обработчик закрытия попапа кликом по экрану
 const closePopupClickScreen = (evt) => {
   if (evt.target.classList.contains("popup_opened")) {
@@ -129,19 +138,14 @@ const editFormSubmitHandler = (evt) => {
   closePopup(profilePopup);
 };
 
-const validationObject = {
-  formSelector: ".popup__form",
-  inputSelector: ".popup__input",
-  submitButtonSelector: ".popup__save-button",
-  inactiveButtonClass: "button_inactive",
-  inputErrorClass: "popup__input_type_error",
-  errorClass: "popup__error_visible",
+const pushCard = (data) => {
+  const cardElement = new Card(data, "#template-card");
+  elementsList.prepend(cardElement.generateCard());
 };
 
 //Создание экземпляров карточек и добавление на страницу
-initialCards.forEach((card) => {
-  card = new Card(card, "#template-card");
-  document.querySelector(".elements__list").prepend(card.generateCard());
+initialCards.forEach((currentCard) => {
+  pushCard(currentCard);
 });
 
 //Валидация форм
@@ -151,20 +155,11 @@ formList.forEach((formElement) => {
   formValid.enableValidation();
 });
 
-//Добавление карточки пользователем
-const pushCard = () => {
-  const cardElement = new Card(
-    {
-      name: placeInput.value,
-      link: linkInput.value,
-    },
-    "#template-card"
-  );
-  elementsList.prepend(cardElement.generateCard());
-};
-
-const addFormSubmitHandler = (evt) => {
-  pushCard();
+const addFormSubmitHandler = () => {
+  pushCard({
+    name: placeInput.value,
+    link: linkInput.value,
+  });
 
   placeInput.value = "";
   linkInput.value = "";
