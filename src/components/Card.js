@@ -6,26 +6,46 @@ export default class Card {
     this._cardSelector = cardSelector;
   }
 
-  //Вернуть шаблон
+  /**
+   * Вернуть шаблон карточки
+   *
+   * @return {object} Возвращает шаблон разметки
+   * @private
+   */
   _getTemplate() {
     return document.querySelector(this._cardSelector).content.cloneNode(true)
       .children[0];
   }
 
-  //Лайк карточки
+  /**
+   * Лайк карточки
+   *
+   * @param  {object} cardElement - разметка карточки
+   * @private
+   */
   _handleChangeLike(cardElement) {
     cardElement
       .querySelector('.elements__group')
       .classList.toggle('elements__group_active');
   }
 
-  //Удаление карточек со страницы
+  /**
+   * Удаление карточек со страницы
+   *
+   * @param  {object} cardElement - разметка карточки
+   * @private
+   */
   _handleRemoveCard(cardElement) {
     cardElement.remove();
     cardElement = null;
   }
 
-  //Обработчики
+  /**
+   * Обработчики событий
+   *
+   * @param  {object} cardElement - разметка карточки
+   * @private
+   */
   _setEventListeners(cardElement) {
     cardElement
       .querySelector('.elements__delete-card')
@@ -44,7 +64,12 @@ export default class Card {
     );
   }
 
-  //Создание карточки
+  /**
+   * Создание карточки
+   *
+   * @public
+   * @return {object} Возвращает заполненную разметку
+   */
   getView() {
     this._cardElement = this._getTemplate();
     this._setEventListeners(this._cardElement);

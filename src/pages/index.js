@@ -20,7 +20,13 @@ import {
 //Экземпляр попапа с картинкой
 const imagePopup = new PopupWithImage('.popup_type_image');
 
-//Функция создания карточки
+/**
+ * Функция создания объекта карточки
+ *
+ * @param  {string} name
+ * @param  {string} link
+ * @return {Card}
+ */
 const createCard = (name, link) => {
   const card = new Card(
     {
@@ -69,6 +75,7 @@ const userInfo = new UserInfo({
 //!так как они заполняются только при открытии попапа
 const setFormFields = () => {
   const { name, info } = userInfo.getUserInfo();
+
   document.querySelector(nameFieldSelector).value = name;
   document.querySelector(jobFieldSelector).value = info;
 };

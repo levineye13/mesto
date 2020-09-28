@@ -26,7 +26,13 @@ export default class FormValidator {
     errorElement.textContent = '';
   }
 
-  //Проверка всех инпутов формы на валидность
+  /**
+   * Проверка всех инпутов формы на валидность
+   *
+   * @private
+   * @param  {Array} inputList - список полей ввода
+   * @return {boolean} true - невалидный инпут
+   */
   _hasInvalidInput(inputList) {
     return inputList.some((inputElement) => {
       return !inputElement.validity.valid;
@@ -42,7 +48,13 @@ export default class FormValidator {
     }
   }
 
-  //Переключатель состояния кнопки
+  /**
+   * Переключатель состояния кнопки
+   *
+   * @private
+   * @param  {Array} inputList - список полей ввода
+   * @param  {object} buttonElement - кнопка сабмита
+   */
   _handleToggleButtonState(inputList, buttonElement) {
     if (this._hasInvalidInput(inputList)) {
       buttonElement.setAttribute('disabled', '');
@@ -55,7 +67,13 @@ export default class FormValidator {
     }
   }
 
-  //Обработчики событий
+  /**
+   * Обработчики событий
+   *
+   * @private
+   * @param  {Array} inputList - список полей ввода
+   * @param  {object} buttonElement - кнопка сабмита
+   */
   _setEventListeners(inputList, buttonElement) {
     this._handleToggleButtonState(inputList, buttonElement);
 
@@ -67,7 +85,12 @@ export default class FormValidator {
     });
   }
 
-  //Публичный метод включения валидации
+  /**
+   * Публичный метод включения валидации
+   *
+   * @public
+   * @this {object}
+   */
   enableValidation() {
     const buttonElement = this._formElement.querySelector(
       this._validationObject.submitButtonSelector
@@ -79,8 +102,7 @@ export default class FormValidator {
 
     this._formElement.addEventListener('submit', (evt) => {
       evt.preventDefault();
-      //!Необходимо заблокировать кнопку здесь, тк после срабатывания события submit и очистки полей кнопка остается доступной,
-      //!тк событие input не видит этих изменений
+      //!Необходимо заблокировать кнопку здесь, тк после срабатывания события submit и очистки полей кнопка остается доступной, тк событие input не видит этих изменений
       this._handleToggleButtonState(inputList, buttonElement);
     });
 
