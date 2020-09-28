@@ -1,14 +1,7 @@
 export default class FormValidator {
-  constructor(validationObject, formElement) {
-    ({
-      formSelector: this._fromSelector,
-      inputSelector: this._inputSelector,
-      submitButtonSelector: this._submitButtonSelector,
-      inactiveButtonClass: this._inactiveButtonClass,
-      inputErrorClass: this._inputErrorClass,
-      errorClass: this._errorClass,
-    } = validationObject),
-      (this._formElement = formElement);
+  constructor(formElement, validationObject) {
+    this._formElement = formElement;
+    this._validationObject = validationObject;
   }
 
   //Показать ошибку
@@ -17,9 +10,9 @@ export default class FormValidator {
       `#${inputElement.id}-error`
     );
 
-    inputElement.classList.add(this._inputErrorClass);
+    inputElement.classList.add(this._validationObject.inputErrorClass);
     errorElement.textContent = errorMessage;
-    errorElement.classList.add(this._errorClass);
+    errorElement.classList.add(this._validationObject.errorClass);
   }
 
   //Скрыть ошибку
@@ -28,8 +21,8 @@ export default class FormValidator {
       `#${inputElement.id}-error`
     );
 
-    inputElement.classList.remove(this._inputErrorClass);
-    errorElement.classList.remove(this._errorClass);
+    inputElement.classList.remove(this._validationObject.inputErrorClass);
+    errorElement.classList.remove(this._validationObject.errorClass);
     errorElement.textContent = '';
   }
 
@@ -53,10 +46,12 @@ export default class FormValidator {
   _handleToggleButtonState(inputList, buttonElement) {
     if (this._hasInvalidInput(inputList)) {
       buttonElement.setAttribute('disabled', '');
-      buttonElement.classList.add(this._inactiveButtonClass);
+      buttonElement.classList.add(this._validationObject.inactiveButtonClass);
     } else {
       buttonElement.removeAttribute('disabled');
-      buttonElement.classList.remove(this._inactiveButtonClass);
+      buttonElement.classList.remove(
+        this._validationObject.inactiveButtonClass
+      );
     }
   }
 
@@ -75,11 +70,11 @@ export default class FormValidator {
   //Публичный метод включения валидации
   enableValidation() {
     const buttonElement = this._formElement.querySelector(
-      this._submitButtonSelector
+      this._validationObject.submitButtonSelector
     );
 
     const inputList = Array.from(
-      this._formElement.querySelectorAll(this._inputSelector)
+      this._formElement.querySelectorAll(this._validationObject.inputSelector)
     );
 
     this._formElement.addEventListener('submit', (evt) => {

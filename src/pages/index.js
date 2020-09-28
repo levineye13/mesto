@@ -108,6 +108,6 @@ document.addEventListener('click', (evt) => {
 //Валидация форм
 const formList = document.querySelectorAll(validationObject.formSelector);
 formList.forEach((formElement) => {
-  const formValid = new FormValidator(validationObject, formElement);
+  const formValid = new FormValidator(formElement, validationObject);
   formValid.enableValidation();
 });
