@@ -41,8 +41,12 @@ export const validationObject = {
 };
 
 export const containerSelector = '.elements__list';
-export const editButton = '.profile__edit-button';
-export const addButton = '.profile__add-button';
+export const openEditFormButton = document.querySelector(
+  '.profile__edit-button'
+);
+export const openCardFormButton = document.querySelector(
+  '.profile__add-button'
+);
 export const profileTitleSelector = '.profile__title';
 export const profileSubtitleSelector = '.profile__subtitle';
 export const nameFieldSelector = '#name-input';

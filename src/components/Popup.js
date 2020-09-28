@@ -22,18 +22,21 @@ export default class Popup {
     );
   }
 
+  //Закрытие на Esc
   _handleEscClose(evt) {
     if (evt.key === 'Escape') {
       this.close();
     }
   }
 
+  //Закрытие по оверлею
   _handleScreenClickClose(evt) {
     if (evt.target.classList.contains('popup_opened')) {
       this.close();
     }
   }
 
+  //Закрытие по клику на кнопку
   _handleButtonClose(evt) {
     if (evt.target.classList.contains('popup__close-button')) {
       this.close();
