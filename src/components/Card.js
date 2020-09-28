@@ -8,18 +8,21 @@ export default class Card {
 
   //Вернуть шаблон
   _getTemplate() {
-    return document.querySelector(this._cardSelector).content;
+    return document.querySelector(this._cardSelector).content.cloneNode(true)
+      .children[0];
   }
 
   //Лайк карточки
-  _handleChangeLike(evt) {
-    evt.target.classList.toggle('elements__group_active');
+  _handleChangeLike(cardElement) {
+    cardElement
+      .querySelector('.elements__group')
+      .classList.toggle('elements__group_active');
   }
 
   //Удаление карточек со страницы
-  _handleRemoveCard(evt) {
-    const cardElement = evt.target.closest('.elements__item');
+  _handleRemoveCard(cardElement) {
     cardElement.remove();
+    cardElement = null;
   }
 
   //Обработчики
@@ -28,20 +31,22 @@ export default class Card {
       .querySelector('.elements__delete-card')
       .addEventListener('click', (evt) => {
         evt.stopPropagation();
-        this._handleRemoveCard(evt);
+        this._handleRemoveCard(cardElement);
       });
     cardElement
       .querySelector('.elements__group')
       .addEventListener('click', (evt) => {
         evt.stopPropagation();
-        this._handleChangeLike(evt);
+        this._handleChangeLike(cardElement);
       });
-    cardElement.addEventListener('click', () => this._handleCardClick());
+    cardElement.addEventListener('click', () =>
+      this._handleCardClick(this._name, this._link)
+    );
   }
 
   //Создание карточки
-  generateCard() {
-    this._cardElement = this._getTemplate().cloneNode(true).children[0];
+  getView() {
+    this._cardElement = this._getTemplate();
     this._setEventListeners(this._cardElement);
 
     this._imgElement = this._cardElement.querySelector('.elements__img');

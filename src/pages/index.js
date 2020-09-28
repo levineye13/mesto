@@ -26,7 +26,7 @@ const renderCards = new Section(
         {
           name,
           link,
-          handleCardClick: () => {
+          handleCardClick: (name, link) => {
             const imagePopup = new PopupWithImage('.popup_type_image', {
               name,
               link,
@@ -37,7 +37,7 @@ const renderCards = new Section(
         },
         '#template-card'
       );
-      renderCards.addItem(card.generateCard());
+      renderCards.addItem(card.getView());
     },
   },
   containerSelector
@@ -63,7 +63,7 @@ const addCardPopup = new PopupWithForm('.popup_type_add-card', {
       },
       '#template-card'
     );
-    renderCards.addItem(card.generateCard());
+    renderCards.addItem(card.getView());
     addCardPopup.close();
   },
 });
