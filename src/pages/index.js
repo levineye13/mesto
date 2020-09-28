@@ -34,7 +34,7 @@ const renderCards = new Section(
         },
         '#template-card'
       );
-      renderCards.addItem(card.getView());
+      renderCards.addItem(card.getView(), true);
     },
   },
   containerSelector
@@ -57,7 +57,7 @@ const addCardPopup = new PopupWithForm('.popup_type_add-card', {
       },
       '#template-card'
     );
-    renderCards.addItem(card.getView());
+    renderCards.addItem(card.getView(), false);
     addCardPopup.close();
   },
 });
