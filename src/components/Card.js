@@ -2,7 +2,9 @@ export default class Card {
   constructor({ name, link, handleCardClick }, cardSelector) {
     this._name = name;
     this._link = link;
+    this._like = 0;
     this._handleCardClick = handleCardClick;
+    //this._handleLikeClick = handleLikeClick;
     this._cardSelector = cardSelector;
   }
 
@@ -23,10 +25,12 @@ export default class Card {
    * @param  {object} cardElement - разметка карточки
    * @private
    */
-  _handleChangeLike(cardElement) {
+  _handleLikeClick(cardElement) {
     cardElement
-      .querySelector('.elements__group')
-      .classList.toggle('elements__group_active');
+      .querySelector('.elements__like-button')
+      .classList.toggle('elements__like-button_active');
+    cardElement.querySelector('.elements__like-count').textContent = ++this
+      ._like;
   }
 
   /**
@@ -54,10 +58,10 @@ export default class Card {
         this._handleRemoveCard(cardElement);
       });
     cardElement
-      .querySelector('.elements__group')
+      .querySelector('.elements__like-button')
       .addEventListener('click', (evt) => {
         evt.stopPropagation();
-        this._handleChangeLike(cardElement);
+        this._handleLikeClick(cardElement);
       });
     cardElement.addEventListener('click', () =>
       this._handleCardClick(this._name, this._link)
@@ -80,6 +84,9 @@ export default class Card {
     this._cardElement.querySelector(
       '.elements__title'
     ).textContent = this._name;
+    this._cardElement.querySelector(
+      '.elements__like-count'
+    ).textContent = this._like;
 
     return this._cardElement;
   }
