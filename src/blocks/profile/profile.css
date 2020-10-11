@@ -1,24 +1,26 @@
 .profile {
-	width: 100%;
-	max-width: 882px;
-	background-color: #000;
-	display: flex;
+  width: 100%;
+  max-width: 882px;
+  min-height: 120px;
+  background-color: #000;
+  display: flex;
+  align-items: center;
 }
 
 @media screen and (max-width: 820px) {
-	.profile {
-		display: grid;
-		grid-template-columns: auto auto;
-		row-gap: 36px;
-		justify-content: center;
-	}
+  .profile {
+    display: grid;
+    grid-template-columns: auto auto;
+    row-gap: 36px;
+    justify-content: center;
+  }
 }
 
 @media screen and (max-width: 530px) {
-	.profile {
-		grid-template-columns: auto;
-		justify-content: stretch;
-		justify-items: center;
-		row-gap: 0;
-	}
+  .profile {
+    grid-template-columns: auto;
+    justify-content: stretch;
+    justify-items: center;
+    row-gap: 0;
+  }
 }

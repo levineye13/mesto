@@ -1,4 +1,5 @@
 .profile__avatar-container {
   max-width: 120px;
+  align-self: stretch;
   position: relative;
 }

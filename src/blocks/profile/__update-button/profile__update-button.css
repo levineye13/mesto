@@ -13,6 +13,7 @@
   -moz-transition: background 0.2s;
   -ms-transition: background 0.2s;
   -o-transition: background 0.2s;
+  cursor: pointer;
 }
 
 .profile__update-button:hover {
