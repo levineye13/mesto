@@ -1,11 +1,12 @@
 export default class Card {
-  constructor({ name, link, handleCardClick }, cardSelector) {
-    this._name = name;
-    this._link = link;
-    //this._like = 0;
+	constructor({ data, handleCardClick, handleLikeClick, handleDeleteIconClick }, cardSelector) {
+    this._data = data;
+		this._likeCount = 0;
+		this._isLiked = false;
     this._handleCardClick = handleCardClick;
-    //this._handleLikeClick = handleLikeClick;
-    this._cardSelector = cardSelector;
+		this._handleLikeClick = handleLikeClick;
+		this._handleDeleteIconClick = handleDeleteIconClick;
+		this._cardSelector = cardSelector;
   }
 
   /**
@@ -25,12 +26,33 @@ export default class Card {
    * @param  {object} cardElement - разметка карточки
    * @private
    */
-  _handleLikeClick(cardElement) {
-    cardElement
-      .querySelector('.elements__like-button')
-      .classList.toggle('elements__like-button_active');
-    //cardElement.querySelector('.elements__like-count').textContent = ++this._like;
-  }
+	toggleLikeButtonState(cardElement) {
+			cardElement.querySelector('.elements__like-button').classList.toggle('elements__like-button_active');
+	}
+
+	setLikeButtonState(state) {
+		this._isLiked = state;
+	}
+
+	getLikeButtonState() {
+		return this._isLiked;
+	}
+	
+	setCountLike(countLike) {
+		this._likeCount = countLike;
+	}
+
+	addLike() {
+		this._cardElement.querySelector(
+      '.elements__like-count'
+		).textContent = ++this._likeCount;
+	}
+
+	removeLike() {
+		this._cardElement.querySelector(
+      '.elements__like-count'
+		).textContent = --this._likeCount;
+	}
 
   /**
    * Удаление карточек со страницы
@@ -38,10 +60,10 @@ export default class Card {
    * @param  {object} cardElement - разметка карточки
    * @private
    */
-  _handleRemoveCard(cardElement) {
-    cardElement.remove();
-    cardElement = null;
-  }
+  // _handleRemoveCard(cardElement) {
+  //   cardElement.remove();
+  //   cardElement = null;
+  // }
 
   /**
    * Обработчики событий
@@ -49,21 +71,22 @@ export default class Card {
    * @param  {object} cardElement - разметка карточки
    * @private
    */
-  _setEventListeners(cardElement) {
+	_setEventListeners(cardElement) {
     cardElement
       .querySelector('.elements__delete-card')
       .addEventListener('click', (evt) => {
-        evt.stopPropagation();
-        this._handleRemoveCard(cardElement);
+				evt.stopPropagation();
+        this._handleDeleteIconClick(cardElement);
       });
     cardElement
       .querySelector('.elements__like-button')
       .addEventListener('click', (evt) => {
-        evt.stopPropagation();
-        this._handleLikeClick(cardElement);
+				evt.stopPropagation();
+				this.toggleLikeButtonState(cardElement);
+				this._handleLikeClick();
       });
     cardElement.addEventListener('click', () =>
-      this._handleCardClick(this._name, this._link)
+      this._handleCardClick(this._data.name, this._data.link)
     );
   }
 
@@ -74,20 +97,18 @@ export default class Card {
    * @return {object} Возвращает заполненную разметку
    */
   getView() {
-    this._cardElement = this._getTemplate();
-    this._setEventListeners(this._cardElement);
-
-		//this._checkOwnerCard();
-
+		this._cardElement = this._getTemplate();
+		this._setEventListeners(this._cardElement);
+		
     this._imgElement = this._cardElement.querySelector('.elements__img');
-    this._imgElement.src = this._link;
-    this._imgElement.setAttribute('alt', this._name);
+    this._imgElement.src = this._data.link;
+    this._imgElement.setAttribute('alt', this._data.name);
     this._cardElement.querySelector(
       '.elements__title'
-    ).textContent = this._name;
+    ).textContent = this._data.name;
     this._cardElement.querySelector(
       '.elements__like-count'
-		).textContent = 0;
+		).textContent = this._likeCount;
 		
     return this._cardElement;
   }

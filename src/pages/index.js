@@ -5,22 +5,29 @@ import FormValidator from './../components/FormValidator.js';
 import Section from './../components/Section.js';
 import PopupWithImage from './../components/PopupWithImage.js';
 import PopupWithForm from './../components/PopupWithForm.js';
+import PopupWithConfirm from './../components/PopupWithConfirm.js';
 import UserInfo from './../components/UserInfo.js';
 import {
   validationObject,
   containerSelector,
   openEditFormButton,
 	openCardFormButton,
-	profileAvatar,
+	//profileAvatar,
   profileTitleSelector,
   profileSubtitleSelector,
   nameFieldSelector,
-  jobFieldSelector,
+	jobFieldSelector,
+	key
 } from './../utils/constants.js';
-
 
 //Экземпляр попапа с картинкой
 const imagePopup = new PopupWithImage('.popup_type_image');
+
+const requestToggleLikeCard = (id, methodHTTP) => {
+	api.likeCard(id, methodHTTP)
+		.then(resData => console.log(resData))
+		.catch(err => console.log(err))
+}
 
 /**
  * Функция создания объекта карточки
@@ -29,18 +36,31 @@ const imagePopup = new PopupWithImage('.popup_type_image');
  * @param  {string} link
  * @return {Card}
  */
-const createCard = (name, link) => {
+const createCard = (data, confirmPopupObject) => {
   const card = new Card(
     {
-      name,
-      link,
+			data,
       handleCardClick: (name, link) => {
         imagePopup.setEventListeners();
-        imagePopup.open(name, link);
+				imagePopup.open(name, link);
       },
-      //handleLikeClick: (card) => {
-      //card._setEventListeners(card);
-      //},
+			handleLikeClick: () => {
+				if (card.getLikeButtonState()) {
+					card.removeLike();
+					card.setLikeButtonState(false);
+					requestToggleLikeCard(data._id, 'DELETE');
+				} else {
+					card.addLike();
+					card.setLikeButtonState(true);
+					requestToggleLikeCard(data._id, 'PUT');
+				}
+			},
+			handleDeleteIconClick: (cardElement) => {
+				confirmPopupObject.setRemoveItemId(data._id);
+				confirmPopupObject.setRemoveItemMarkup(cardElement);
+				confirmPopupObject.setEventListeners();
+				confirmPopupObject.open();
+			}
     },
     '#template-card'
   );
@@ -53,11 +73,11 @@ const createCard = (name, link) => {
  * @param  {Object} cardElement - разметка карточки
  * @param  {Object} ownerId - значение поля id создателя карточки
  * 
- * @return {Object} - возвращает туже разметку карточки, но возможность удаления дооступна только для своих карочек
+ * @return {Object} - возвращает туже разметку карточки, но возможность удаления дооступна только для своих карточек
  */
 const checkOwnerCard = (cardElement, ownerId) => {
-	if (ownerId !== 'a18ad6c4ea5951823f091de3') {
-		cardElement.querySelector('.elements__delete-card').classList.add('elements__delete-card_inactive');
+	if (ownerId !== key) {
+		cardElement.querySelector('.elements__delete-card').remove();
 	}
 	return cardElement;
 }
@@ -78,34 +98,57 @@ api.getProfileInfo()
 	.then(data => {
 		userInfo.setUserInfo(data);
 	})
+	.catch(err => err)
 
 api.getInitialCards()
 	.then(data => {
+		//Создание экземпляра формы удаления карточки
+		const deleteCardPopup = new PopupWithConfirm('.popup_type_confirm', {
+			handleSubmitForm: (cardId) => {
+				api.deleteCard(cardId)
+					.catch(err => console.log(err));
+				deleteCardPopup.close()
+			}
+		});
+
+		//Создание экземпляра формы добавления карточки
+		const addCardPopup = new PopupWithForm('.popup_type_add-card', {
+			handleSubmitForm: ({ place: name, link }) => {
+				api.addCard({ name, link })
+					.then(data => {
+					renderCards.addItem(createCard(data, deleteCardPopup).getView(), false);
+					})
+					.catch(err => err);
+				addCardPopup.close();
+  		},
+		});
+
 		const renderCards = new Section(
 			{
 				items: data,
 				renderer: (data) => {
-					const card = createCard(data.name, data.link).getView();
-					renderCards.addItem(checkOwnerCard(card, data.owner._id), true);
+					const card = createCard(data, deleteCardPopup);
+					card.setCountLike(data.likes.length);
+					const cardElement = card.getView();
+					data.likes.forEach(item => {
+						if (item._id === key) {
+							card.setLikeButtonState(true);
+							card.toggleLikeButtonState(cardElement);
+						}
+					})
+					renderCards.addItem(checkOwnerCard(cardElement, data.owner._id), true);
 				},
 			},
 			containerSelector
 		);
 		renderCards.renderItems();
-	}
-)
 
-//Создание экземпляра формы добавления карточки
-const addCardPopup = new PopupWithForm('.popup_type_add-card', {
-	handleSubmitForm: ({ place: name, link }) => {
-		api.addCard({ name, link })
-			.then(data => {
-				renderCards.addItem(createCard(data.name, data.link).getView(), false);
-    		addCardPopup.close();
-			})
-  },
-});
-addCardPopup.setEventListeners();
+		openCardFormButton.addEventListener('click', () => {
+			addCardPopup.setEventListeners();
+			addCardPopup.open();
+		});
+	})
+	.catch(err => err)
 
 //!Заполнение инпутов при загрузке страницы, иначе кнопка была бы disable даже при заполненных полях,
 //!так как они заполняются только при открытии попапа
@@ -138,7 +181,10 @@ openEditFormButton.addEventListener('click', () => {
 });
 
 //открытие формы добавления карточек
-openCardFormButton.addEventListener('click', () => addCardPopup.open());
+// openCardFormButton.addEventListener('click', () => {
+// 	addCardPopup.setEventListeners();
+// 	addCardPopup.open();
+// });
 
 //Валидация форм
 const formList = document.querySelectorAll(validationObject.formSelector);

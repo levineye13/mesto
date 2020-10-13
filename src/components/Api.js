@@ -71,5 +71,18 @@ export default class Api {
 			method: 'DELETE',
 			headers: this._headers
 		})
+			.then(responce => this._checkResponceStatus(responce))
+	}
+
+	_selectMethodLikeCard(requestBody) {
+
+	}
+
+	likeCard(cardId, methodHTTP) {
+			return fetch(`${this._baseUrl}/cards/likes/${cardId}`, {
+				method: methodHTTP,
+				headers: this._headers
+			})
+				.then(responce => this._checkResponceStatus(responce))
 	}
 }
