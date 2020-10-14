@@ -12,9 +12,10 @@ import {
   containerSelector,
   openEditFormButton,
 	openCardFormButton,
-	//profileAvatar,
+	openUpdateFormButton,
+	profileAvatarSelector,
   profileTitleSelector,
-  profileSubtitleSelector,
+	profileSubtitleSelector,
   nameFieldSelector,
 	jobFieldSelector,
 	key
@@ -68,6 +69,18 @@ const createCard = (data, confirmPopupObject) => {
 };
 
 /**
+ * Заполнение инпутов при загрузке страницы
+ * 
+ * @public
+ */
+const setFormFields = () => {
+  const { avatar, name, about } = userInfo.getUserInfo();
+
+  document.querySelector(nameFieldSelector).value = name;
+  document.querySelector(jobFieldSelector).value = about;
+};
+
+/**
  * Функция проверки принадлежности карточки пользователю
  * 
  * @param  {Object} cardElement - разметка карточки
@@ -84,7 +97,7 @@ const checkOwnerCard = (cardElement, ownerId) => {
 
 //Создание экземпляра информации о пользователе
 const userInfo = new UserInfo({
-	//profileAvatar,
+	profileAvatarSelector,
 	profileTitleSelector,
 	profileSubtitleSelector,
 	});
@@ -98,7 +111,7 @@ api.getProfileInfo()
 	.then(data => {
 		userInfo.setUserInfo(data);
 	})
-	.catch(err => err)
+	.catch(err => console.log(err))
 
 api.getInitialCards()
 	.then(data => {
@@ -111,6 +124,20 @@ api.getInitialCards()
 			}
 		});
 
+		//Создание экземпляра формы редактирования профиля
+		const editInfoPopup = new PopupWithForm('.popup_type_profile', {
+			handleSubmitForm: (data) => {
+				api.editProfile(data)
+					.then(data => {
+						userInfo.setUserInfo(data);
+						editInfoPopup.close();
+						setFormFields();
+					})
+					.catch(err => console.log(err))
+				editInfoPopup.close();
+  		},
+		});
+
 		//Создание экземпляра формы добавления карточки
 		const addCardPopup = new PopupWithForm('.popup_type_add-card', {
 			handleSubmitForm: ({ place: name, link }) => {
@@ -121,6 +148,18 @@ api.getInitialCards()
 					.catch(err => err);
 				addCardPopup.close();
   		},
+		});
+
+		//Создание экземпляра формы редактирования аватара
+		const updateAvatarPopup = new PopupWithForm('.popup_type_update-avatar', {
+			handleSubmitForm: (data) => {
+				api.updateUserAvatar(data.link)
+					.then(data => {
+						document.querySelector(profileAvatarSelector).src = data.avatar;
+					})
+					.catch(err => console.log(err));
+				updateAvatarPopup.close();
+			}
 		});
 
 		const renderCards = new Section(
@@ -143,48 +182,24 @@ api.getInitialCards()
 		);
 		renderCards.renderItems();
 
+		setFormFields();
 		openCardFormButton.addEventListener('click', () => {
 			addCardPopup.setEventListeners();
 			addCardPopup.open();
 		});
+		openUpdateFormButton.addEventListener('click', () => {
+			updateAvatarPopup.setEventListeners();
+			updateAvatarPopup.open();
+		});
+
+		//Открытие формы редактирования
+		openEditFormButton.addEventListener('click', () => {
+			setFormFields();
+			editInfoPopup.setEventListeners();
+  		editInfoPopup.open();
+		});
 	})
 	.catch(err => err)
-
-//!Заполнение инпутов при загрузке страницы, иначе кнопка была бы disable даже при заполненных полях,
-//!так как они заполняются только при открытии попапа
-const setFormFields = () => {
-  const { name, info } = userInfo.getUserInfo();
-
-  document.querySelector(nameFieldSelector).value = name;
-  document.querySelector(jobFieldSelector).value = info;
-};
-
-setFormFields();
-
-//Создание экземпляра формы редактирования профиля
-const editInfoPopup = new PopupWithForm('.popup_type_profile', {
-	handleSubmitForm: (data) => {
-		api.editProfile(data)
-			.then(data => {
-				userInfo.setUserInfo(data);
-				editInfoPopup.close();
-				setFormFields();
-			})
-  },
-});
-editInfoPopup.setEventListeners();
-
-//Открытие формы редактирования
-openEditFormButton.addEventListener('click', () => {
-  setFormFields();
-  editInfoPopup.open();
-});
-
-//открытие формы добавления карточек
-// openCardFormButton.addEventListener('click', () => {
-// 	addCardPopup.setEventListeners();
-// 	addCardPopup.open();
-// });
 
 //Валидация форм
 const formList = document.querySelectorAll(validationObject.formSelector);

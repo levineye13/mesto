@@ -74,15 +74,22 @@ export default class Api {
 			.then(responce => this._checkResponceStatus(responce))
 	}
 
-	_selectMethodLikeCard(requestBody) {
-
-	}
-
 	likeCard(cardId, methodHTTP) {
 			return fetch(`${this._baseUrl}/cards/likes/${cardId}`, {
 				method: methodHTTP,
 				headers: this._headers
 			})
 				.then(responce => this._checkResponceStatus(responce))
+	}
+
+	updateUserAvatar(avatarLink) {
+		return fetch(`${this._baseUrl}/users/me/avatar`, {
+			method: 'PATCH',
+			headers: this._headers,
+			body: JSON.stringify({
+				avatar: avatarLink
+			})
+		})
+			.then(responce => this._checkResponceStatus(responce))
 	}
 }

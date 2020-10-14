@@ -1,8 +1,8 @@
 export default class UserInfo {
-	constructor({ profileAvatar, profileTitleSelector, profileSubtitleSelector }) {
-		//this._avatar = document.querySelector(profileAvatar);
+	constructor({ profileAvatarSelector, profileTitleSelector, profileSubtitleSelector }) {
+		this._avatar = document.querySelector(profileAvatarSelector);
     this._name = document.querySelector(profileTitleSelector);
-    this._info = document.querySelector(profileSubtitleSelector);
+    this._about = document.querySelector(profileSubtitleSelector);
   }
   /**
 	 * Метод получения объекта информации о пользователе
@@ -11,9 +11,9 @@ export default class UserInfo {
    */
   getUserInfo() {
 		return {
-			//avatar: this._avatar.src,
+			avatar: this._avatar.src,
       name: this._name.textContent,
-      info: this._info.textContent,
+      about: this._about.textContent,
     };
 	}
 	
@@ -24,8 +24,8 @@ export default class UserInfo {
    * @param  {string} info - дополнительная информация
    */
 	setUserInfo(data) {
-		//this._avatar.src = data.avatar;
+		this._avatar.src = data.avatar;
     this._name.textContent = data.name;
-    this._info.textContent = data.about;
+    this._about.textContent = data.about;
   }
 }

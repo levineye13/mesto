@@ -14,7 +14,10 @@ export const openEditFormButton = document.querySelector(
 export const openCardFormButton = document.querySelector(
   '.profile__add-button'
 );
-export const profileAvatar = '.profile__avatar';
+export const openUpdateFormButton = document.querySelector(
+  '.profile__update-button'
+);
+export const profileAvatarSelector = '.profile__avatar';
 export const profileTitleSelector = '.profile__title';
 export const profileSubtitleSelector = '.profile__subtitle';
 export const nameFieldSelector = '#name-input';
