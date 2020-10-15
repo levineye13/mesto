@@ -22,4 +22,3 @@ export const profileTitleSelector = '.profile__title';
 export const profileSubtitleSelector = '.profile__subtitle';
 export const nameFieldSelector = '#name-input';
 export const jobFieldSelector = '#job-input';
-export const key = 'a18ad6c4ea5951823f091de3';
