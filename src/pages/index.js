@@ -1,4 +1,4 @@
-//import './index.css';
+import './index.css';
 import Api from './../components/Api.js';
 import Card from './../components/Card.js';
 import FormValidator from './../components/FormValidator.js';
@@ -149,10 +149,10 @@ const deleteCardPopup = new PopupWithConfirm(popupConfirmSelector, {
 	handleSubmitForm: (cardId) => {
 		renderLoading(popupConfirmSelector, true);
 		api.deleteCard(cardId)
+			.then(() => deleteCardPopup.close())
 			.catch(err => console.log(err))
 			.finally(() => {
 				renderLoading(popupConfirmSelector, false);
-				deleteCardPopup.close();
 			})
 	}
 });
