@@ -22,3 +22,9 @@ export const profileTitleSelector = '.profile__title';
 export const profileSubtitleSelector = '.profile__subtitle';
 export const nameFieldSelector = '#name-input';
 export const jobFieldSelector = '#job-input';
+
+export const popupImageSelector = '.popup_type_image';
+export const popupProfileSelector = '.popup_type_profile';
+export const popupAddCardSelector = '.popup_type_add-card';
+export const popupConfirmSelector = '.popup_type_confirm';
+export const popupUpdateAvatarSelector = '.popup_type_update-avatar';
