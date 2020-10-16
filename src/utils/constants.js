@@ -20,8 +20,8 @@ export const openUpdateFormButton = document.querySelector(
 export const profileAvatarSelector = '.profile__avatar';
 export const profileTitleSelector = '.profile__title';
 export const profileSubtitleSelector = '.profile__subtitle';
-export const nameFieldSelector = '#name-input';
-export const jobFieldSelector = '#job-input';
+export const nameField = document.querySelector('#name-input');
+export const jobField = document.querySelector('#job-input');
 
 export const popupImageSelector = '.popup_type_image';
 export const popupProfileSelector = '.popup_type_profile';

@@ -16,17 +16,14 @@ import {
 	profileAvatarSelector,
   profileTitleSelector,
 	profileSubtitleSelector,
-  nameFieldSelector,
-	jobFieldSelector,
+	nameField,
+	jobField,
 	popupAddCardSelector,
 	popupConfirmSelector,
 	popupImageSelector,
 	popupProfileSelector,
 	popupUpdateAvatarSelector
 } from './../utils/constants.js';
-
-//ID пользователя
-let myId = null;
 
 /**
  * Функция изменения состояния лайка
@@ -135,8 +132,8 @@ const createCard = (data) => {
 const setFormFields = () => {
   const info = userInfo.getUserInfo();
 
-  document.querySelector(nameFieldSelector).value = info.name;
-  document.querySelector(jobFieldSelector).value = info.about;
+  nameField.value = info.name;
+  jobField.value = info.about;
 };
 
 /**
@@ -147,7 +144,7 @@ const setFormFields = () => {
  * 
  * @return {Object} - возвращает туже разметку карточки, но возможность удаления дооступна только для своих карточек
  */
-const checkOwnerCard = (cardElement, ownerId) => {
+const checkOwnerCard = (cardElement, ownerId, myId) => {
 	if (ownerId !== myId) {
 		cardElement.querySelector('.elements__delete-card').remove();
 	}
@@ -188,7 +185,6 @@ const editInfoPopup = new PopupWithForm(popupProfileSelector, {
 			.then(data => {
 				userInfo.setUserInfo(data);
 				editInfoPopup.close();
-				setFormFields();
 			})
 			.catch(err => console.log(err))
 			.finally(() => renderLoading(popupProfileSelector, false));
@@ -215,15 +211,18 @@ const api = new Api('https://mesto.nomoreparties.co/v1/cohort-16', {
 	'Content-Type': 'application/json'
 });
 
-api.getProfileInfo()
-	.then(data => {
-		userInfo.setUserInfo(data);
-		myId = userInfo.getUserInfo().id;
-	})
-	.catch(err => console.log(err))
+api.getInitialData()
+	//Блок работы с информацией о пользователе
+	.then(dataArray => {
+		const [userInfoData, cardInfoData] = dataArray;
 
-api.getInitialCards()
-	.then(data => {
+		userInfo.setUserInfo(userInfoData);
+		const myId = userInfo.getUserInfo().id;
+
+		return { cardInfoData, myId };
+	})
+	//Блок работы с карточками
+	.then(({ cardInfoData: data, myId }) => {
 		const renderCards = new Section(
 			{
 				items: data,
@@ -238,7 +237,7 @@ api.getInitialCards()
 							card.toggleLikeButtonState(cardElement);
 						}
 					})
-					renderCards.addItem(checkOwnerCard(cardElement, data.owner._id), true);
+					renderCards.addItem(checkOwnerCard(cardElement, data.owner._id, myId), true);
 				},
 			},
 			containerSelector
@@ -259,12 +258,13 @@ api.getInitialCards()
 			},
 		});
 
-		setFormFields();
-
+		//Открытие формы добавления карточек
 		openCardFormButton.addEventListener('click', () => {
 			addCardPopup.setEventListeners();
 			addCardPopup.open();
 		});
+
+		//Открытие формы обновления аватара
 		openUpdateFormButton.addEventListener('click', () => {
 			updateAvatarPopup.setEventListeners();
 			updateAvatarPopup.open();
@@ -277,8 +277,8 @@ api.getInitialCards()
 			editInfoPopup.open();
 		});
 	})
+	//Блок работы с валидацией форм
 	.then(() => {
-		//Валидация форм
 		const formList = document.querySelectorAll(validationObject.formSelector);
 		formList.forEach((formElement) => {
 			const formValid = new FormValidator(formElement, validationObject);

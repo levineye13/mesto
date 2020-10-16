@@ -42,6 +42,10 @@ export default class Api {
 			.then(responce => this._checkResponceStatus(responce))
 	}
 
+	getInitialData() {
+		return Promise.all([this.getProfileInfo(), this.getInitialCards()]);
+	}
+
 	editProfile(data) {
 		return fetch(`${this._baseUrl}/users/me`, {
 			method: 'PATCH',

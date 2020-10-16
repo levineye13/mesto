@@ -8,7 +8,7 @@ export default class UserInfo {
   /**
 	 * Метод получения объекта информации о пользователе
 	 * 
-	 * @return {Object}
+	 * @return {Object} - информация о пользователе
    */
   getUserInfo() {
 		return {
@@ -22,8 +22,7 @@ export default class UserInfo {
   /**
    * Метод устанавливает информацию о пользователе из введенных в форму значений
    *
-   * @param  {string} name - имя пользователя
-   * @param  {string} info - дополнительная информация
+   * @param  {Object} data - объект с информацией о пользователе
    */
 	setUserInfo(data) {
 		this._myId = data._id;

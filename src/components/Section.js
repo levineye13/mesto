@@ -10,10 +10,10 @@ export default class Section {
    * @param  {object} element - разметка вставляемой карточки
    * @param  {boolean} isArray - проверка на массив
    */
-  addItem(element, isArray) {
-    if (isArray) {
+	addItem(element, isArray) {
+		if (isArray) {
       this._container.append(element);
-    } else {
+		} else {
       this._container.prepend(element);
     }
   }
