@@ -146,10 +146,13 @@ const imagePopup = new PopupWithImage(popupImageSelector);
 
 //Создание экземпляра формы удаления карточки
 const deleteCardPopup = new PopupWithConfirm(popupConfirmSelector, {
-	handleSubmitForm: (cardId) => {
+	handleSubmitForm: (cardId, cardMarkup) => {
 		renderLoading(popupConfirmSelector, true);
 		api.deleteCard(cardId)
-			.then(() => deleteCardPopup.close())
+			.then(() => {
+				cardMarkup.remove();
+				deleteCardPopup.close();
+			})
 			.catch(err => console.log(err))
 			.finally(() => {
 				renderLoading(popupConfirmSelector, false);
