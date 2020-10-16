@@ -82,8 +82,7 @@ export default class Card {
       .querySelector('.elements__like-button')
       .addEventListener('click', (evt) => {
 				evt.stopPropagation();
-				this.toggleLikeButtonState(cardElement);
-				this._handleLikeClick();
+				this._handleLikeClick(cardElement);
       });
     cardElement.addEventListener('click', () =>
       this._handleCardClick(this._data.name, this._data.link)

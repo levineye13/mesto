@@ -25,17 +25,40 @@ import {
 	popupUpdateAvatarSelector
 } from './../utils/constants.js';
 
+//ID пользователя
 let myId = null;
+
+/**
+ * Функция изменения состояния лайка
+ * 
+ * @param  {Object} card - объект карточки
+ * @param  {Object} cardMarkup- разметка карточки
+ * @param  {Boolean} likeButtonState - состояние кнопки (поля _isLiked объекта Card)
+ */
+const toggleLikeCard = (card, cardMarkup, likeButtonState) => {
+	if (likeButtonState) {
+				card.removeLike();
+				card.setLikeButtonState(false);
+			} else {
+				card.addLike();
+				card.setLikeButtonState(true);
+			}
+			card.toggleLikeButtonState(cardMarkup);
+}
 
 /**
  * Функция для выбора операции добавления/удаления лайка (PUT/DELETE)
  * 
+ * @param  {Object} card - объект карточки
+ * @param  {Object} cardMarkup - разметка карточки
+ * @param  {Boolean} likeButtonState - состояние кнопки (поля _isLiked объекта Card)
  * @param  {String} id - id карточки
  * @param  {String} methodHTTP - HTTP PUT/DELETE
  * @public
  */
-const requestToggleLikeCard = (id, methodHTTP) => {
+const requestToggleLikeCard = (card, cardMarkup, likeButtonState, id, methodHTTP) => {
 	api.likeCard(id, methodHTTP)
+		.then(() => toggleLikeCard(card, cardMarkup, likeButtonState))
 		.catch(err => console.log(err))
 }
 /**
@@ -84,15 +107,12 @@ const createCard = (data) => {
         imagePopup.setEventListeners();
 				imagePopup.open(name, link);
       },
-			handleLikeClick: () => {
-				if (card.getLikeButtonState()) {
-					card.removeLike();
-					card.setLikeButtonState(false);
-					requestToggleLikeCard(data._id, 'DELETE');
+			handleLikeClick: (cardElement) => {
+				const likeButtonState = card.getLikeButtonState();
+				if (likeButtonState) {
+					requestToggleLikeCard(card, cardElement, likeButtonState, data._id, 'DELETE');
 				} else {
-					card.addLike();
-					card.setLikeButtonState(true);
-					requestToggleLikeCard(data._id, 'PUT');
+					requestToggleLikeCard(card, cardElement, likeButtonState, data._id, 'PUT');
 				}
 			},
 			handleDeleteIconClick: (cardElement) => {
